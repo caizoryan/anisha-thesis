@@ -45,6 +45,9 @@ function create_entry_sequence() {
 	// entry_sequence.src = './short.mp4';
 	entry_sequence.autoplay = true;
 	entry_sequence.loop = false;
+	entry_sequence.onclick = () => {
+		if (entry_sequence.paused) entry_sequence.play();
+	}
 	entry_sequence.onended = () => {
 		entry_sequence.remove();
 		show_start_game();
