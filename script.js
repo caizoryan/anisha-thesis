@@ -1,3 +1,93 @@
+function create_video_library() {
+	let videos = [
+		{
+			src: './scenes/video1.mp4',
+			options: [
+				{ message: "Get up and explore", next: 2 }
+			]
+		},
+
+		{
+			src: './scenes/video2.mp4',
+			options: [
+				{ message: "interact", next: 3 },
+			]
+		}
+		,
+
+		{
+			src: './scenes/video3.mp4',
+			options: [
+				{ message: "try and get out", next: 4 },
+			]
+		}
+
+		,
+
+		{
+			src: './scenes/video4.mp4',
+			options: [
+				{ message: "approach them", next: 5 },
+				{ message: "ignore them", next: 6 },
+			]
+		}
+
+		,
+
+		{
+			src: './scenes/video5.mp4',
+			options: [
+				{ message: "continue to dinner", next: 7 },
+				{ message: "run into the tunnel", next: 1 },
+			]
+		},
+
+		{
+			src: "./scenes/video6.mp4",
+			options: [
+				{ message: "continue", next: 8 }
+			]
+		},
+
+		{
+			src: "./scenes/video7.mp4",
+			options: [
+				{ message: "sit with them", next: 9 }
+			]
+		},
+		{
+			src: "./scenes/video8.mp4",
+			options: [
+				{ message: "sit with them", next: 9 }
+			]
+		},
+
+		{
+			src: "./scenes/video9.mp4",
+			options: [
+				{ message: "get away from them", next: 0 },
+				{ message: "touch the candle", next: 10 }
+
+			]
+		},
+
+		{
+			src: "./scenes/video10.mp4",
+			options: [
+				{ message: "restart", next: 1 },
+			]
+		}
+
+
+	]
+
+	let get_video = (num) => videos[num - 1];
+
+	return { get_video, videos }
+}
+
+let library = create_video_library()
+
 function create_loop_video() {
 	let loop_video = document.createElement('video');
 	loop_video.src = './render.mp4'
@@ -41,8 +131,8 @@ function create_container() {
 
 function create_entry_sequence() {
 	let entry_sequence = document.createElement('video');
-	entry_sequence.src = './entry.mp4';
-	// entry_sequence.src = './short.mp4';
+	// entry_sequence.src = './entry.mp4';
+	entry_sequence.src = './short.mp4';
 	entry_sequence.autoplay = true;
 	entry_sequence.loop = false;
 	entry_sequence.onclick = () => {
@@ -55,6 +145,57 @@ function create_entry_sequence() {
 
 	return entry_sequence;
 }
+
+function add_video(num) {
+	let video = document.createElement('video')
+
+	// get and set video src
+	let video_source = library.get_video(num).src
+	video.src = video_source
+	video.autoplay = "true"
+	video.playbackRate = .5
+
+	// 
+	container.appendChild(video)
+
+	return video
+}
+
+function play_scene(num) {
+	let video_element = add_video(num)
+	let video = library.get_video(num)
+
+	video_element.onended = () => {
+
+		video.options.forEach((option, i) => {
+			add_button(option.message, option.next, (i + 1) * 30)
+		})
+	}
+}
+
+function add_button(message, link, left = 30) {
+	let btn = document.createElement('button');
+	btn.innerText = message;
+	btn.onclick = () => {
+		btn.remove();
+		document.querySelectorAll("button").forEach((e) => e.remove())
+		document.querySelector("video").remove()
+		setTimeout(() => {
+			play_scene(link)
+		}, 20);
+	}
+
+	let style = {
+		position: 'fixed',
+		bottom: "80px",
+		left: left + "vw",
+	}
+
+	Object.assign(btn.style, style);
+	float_element(btn);
+	document.body.appendChild(btn);
+}
+
 
 function create_second_scene() {
 	let img = document.createElement('img');
@@ -85,7 +226,7 @@ function show_start_game() {
 	option_1.onclick = () => {
 		option_1.remove();
 		setTimeout(() => {
-			transition_to_loop();
+			play_scene(1)
 		}, 20);
 	}
 
@@ -101,30 +242,6 @@ function show_start_game() {
 
 }
 
-function show_get_out_option() {
-	let option_1 = document.createElement('button');
-	option_1.innerText = 'get out';
-	option_1.onclick = () => {
-		option_1.remove();
-		loop_video.remove();
-		setTimeout(() => {
-			container.appendChild(second_scene);
-		}, 20);
-
-		container.fade_in()
-	}
-
-	let style = {
-		position: 'fixed',
-		bottom: "80px",
-		left: "30vw",
-	}
-
-	Object.assign(option_1.style, style);
-	float_element(option_1);
-	document.body.appendChild(option_1);
-
-}
 
 function float_element(element) {
 	let inc = 0;
