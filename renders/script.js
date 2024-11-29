@@ -78,6 +78,7 @@ function create_entry_sequence() {
 	entry_sequence.loop = false;
 	entry_sequence.onclick = () => {
 		if (entry_sequence.paused) entry_sequence.play();
+		if (audio.paused) audio.play();
 	}
 	entry_sequence.onended = () => {
 		entry_sequence.remove();
