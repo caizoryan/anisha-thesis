@@ -72,8 +72,8 @@ function create_container() {
 
 function create_entry_sequence() {
 	let entry_sequence = document.createElement('video');
-	// entry_sequence.src = './entry.mp4';
-	entry_sequence.src = './short.mp4';
+	entry_sequence.src = './entry.mp4';
+	// entry_sequence.src = './short.mp4';
 	entry_sequence.autoplay = true;
 	entry_sequence.loop = false;
 	entry_sequence.onclick = () => {
