@@ -1,3 +1,8 @@
+let audio = new Audio('./sound.mp3');
+document.body.appendChild(audio);
+audio.loop = true;
+audio.play();
+
 function create_video_library() {
 	let videos = [
 		{
